@@ -9,11 +9,9 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
-const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
+const RegisterFormComponent = ({ email, setEmail, password, setPassword }) => {
   const [view, setView] = useState(false);
-  const navigation=useNavigation()
 
   const ref = useRef(null);
 
@@ -24,6 +22,9 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.mainForm}>
+        <View style={styles.inputContainer}>
+          <TextInput placeholder="Username" style={styles.input} ref={ref} />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput placeholder="Email" style={styles.input} ref={ref} />
         </View>
@@ -55,9 +56,9 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
         </View>
 
         <View style={styles.loginButtonContainer}>
-          <Pressable onPress={()=>navigation.replace("CHAT")}>
+          <Pressable>
             <View style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>Login</Text>
+              <Text style={styles.loginButtonText}>Register</Text>
             </View>
           </Pressable>
         </View>
@@ -65,7 +66,7 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
     </View>
   );
 };
-export default LoginFormContainer;
+export default RegisterFormComponent;
 const styles = StyleSheet.create({
   mainContainer: {
     height: HEIGHT * 0.3,

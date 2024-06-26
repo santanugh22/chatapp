@@ -12,14 +12,14 @@ const Stack = createStackNavigator();
 import useSocket from "../hooks/useSocket";
 import axios from "axios";
 import { createContext, useEffect } from "react";
-
-export const SocketContext = createContext(null);
+import SocketContext from "../utils/SocketContext";
+import MessagingPage from "../screens/chat/MessagingPage";
 const StackNavigator = () => {
   const axiosInstance = axios.create({
     url: "http://localhost:3000/api/",
   });
 
-  const { socket, error } = useSocket("http://localhost:3000");
+  // const { socket, error } = useSocket("http://localhost:3000");
 
   useEffect(() => {
     InitializeDB();
@@ -27,7 +27,7 @@ const StackNavigator = () => {
 
   return (
     <AxiosContext.Provider value={axiosInstance}>
-      <SocketContext.Provider value={socket}>
+      <SocketContext.Provider value={"socket"}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
@@ -37,6 +37,7 @@ const StackNavigator = () => {
             <Stack.Screen name="LOGIN" component={Login} />
             <Stack.Screen name="REGISTER" component={Register} />
             <Stack.Screen name="CHAT" component={Chat} />
+            <Stack.Screen name="MESSAGE" component={MessagingPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </SocketContext.Provider>
