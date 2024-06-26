@@ -1,4 +1,9 @@
-import { Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+} from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LoginHeader from "../../components/login/LoginHeader";
@@ -6,6 +11,7 @@ import AxiosContext from "../../utils/AxiosContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginFormContainer from "../../components/login/LoginFormContainer";
+import LoginBottomContainer from "../../components/login/LoginBottomContainer";
 
 const Login = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -17,7 +23,7 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
-  async function Login() {
+  async function LoginUser() {
     try {
       const result = await axiosInstance.post("auth/login", {
         email,
@@ -34,6 +40,8 @@ const Login = ({ navigation }) => {
   async function CheckLoginStatus() {
     try {
       const token = await AsyncStorage.getItem("token");
+      console.log(token);
+
       if (token) {
         setLoggedIn(true);
       }
@@ -42,14 +50,13 @@ const Login = ({ navigation }) => {
     }
   }
 
-  console.log("MEOW");
-
   useEffect(() => {
     CheckLoginStatus();
     if (loggedIn) {
+      console.log("MEOW");
       navigation.replace("CHAT");
     }
-  }, []);
+  }, [loggedIn]);
 
   return (
     <SafeAreaView
@@ -60,7 +67,16 @@ const Login = ({ navigation }) => {
       }}
     >
       <LoginHeader />
-      <LoginFormContainer />
+      <KeyboardAvoidingView keyboardVerticalOffset={12} behavior="height">
+        <LoginFormContainer
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          LoginUser={LoginUser}
+        />
+      </KeyboardAvoidingView>
+      <LoginBottomContainer />
     </SafeAreaView>
   );
 };

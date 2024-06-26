@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,11 +13,17 @@ const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
 const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
   const [view, setView] = useState(false);
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    ref?.current?.focus();
+  }, []);
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.mainForm}>
         <View style={styles.inputContainer}>
-          <TextInput placeholder="Email" style={styles.input} />
+          <TextInput placeholder="Email" style={styles.input} ref={ref} />
         </View>
         <View style={styles.passwordContainer}>
           <TextInput
@@ -25,23 +31,31 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword }) => {
             style={styles.input}
             secureTextEntry={view}
           />
-          <Text>
-            {view ? (
-              <TouchableHighlight onPress={() => setView(!view)}>
-                <Feather name="eye-off" size={24} color="white" />
-              </TouchableHighlight>
-            ) : (
-              <TouchableHighlight onPress={() => setView(!view)}>
-                <Feather name="eye" size={24} color="white" />
-              </TouchableHighlight>
-            )}
-          </Text>
+
+          {view ? (
+            <TouchableHighlight
+              onPress={() => setView(!view)}
+              style={{ justifyContent: "center", alignItems: "center" }}
+            >
+              <Feather name="eye-off" size={24} color="#be185d" />
+            </TouchableHighlight>
+          ) : (
+            <TouchableHighlight
+              onPress={() => setView(!view)}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Feather name="eye" size={24} color="#be185d" />
+            </TouchableHighlight>
+          )}
         </View>
 
-        <View>
+        <View style={styles.loginButtonContainer}>
           <Pressable>
-            <View>
-              <Text>Login</Text>
+            <View style={styles.loginButton}>
+              <Text style={styles.loginButtonText}>Login</Text>
             </View>
           </Pressable>
         </View>
@@ -57,27 +71,48 @@ const styles = StyleSheet.create({
   },
   input: {
     height: HEIGHT * 0.05,
-    width: WIDTH * 0.88,
-    backgroundColor: "gray",
+    width: WIDTH * 0.85,
+    backgroundColor: "#fce7f3",
     paddingLeft: 2,
   },
   passwordContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "gray",
+    backgroundColor: "#fce7f3",
     width: WIDTH * 0.95,
     alignSelf: "center",
+    height: HEIGHT * 0.065,
+    borderRadius: 7,
+    overflow: "hidden",
   },
   inputContainer: {
-    height: HEIGHT * 0.05,
+    height: HEIGHT * 0.065,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "gray",
+    backgroundColor: "#fce7f3",
     width: WIDTH * 0.95,
     alignSelf: "center",
+    borderRadius: 7,
+    overflow: "hidden",
   },
   mainForm: {
     gap: 2,
+  },
+  loginButton: {
+    height: HEIGHT * 0.06,
+    width: WIDTH * 0.4,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#db2777",
+    alignSelf: "center",
+    borderRadius: 7,
+  },
+  loginButtonContainer: {
+    marginTop: 14,
+  },
+  loginButtonText: {
+    fontSize: 16,
+    color: "#fbcfe8",
   },
 });

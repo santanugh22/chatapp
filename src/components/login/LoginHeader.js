@@ -12,10 +12,11 @@ const styles = StyleSheet.create({
   mainContainer: {
     height: HEIGHT * 0.2,
     alignItems: "center",
+    justifyContent: "center",
   },
   headerText: {
     fontSize: 30,
-    color: "white",
+    color: "#e11d48",
     fontWeight: "900",
   },
 });
