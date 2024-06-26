@@ -10,7 +10,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SocketContext from "../../utils/SocketContext";
 import { useContext } from "react";
-import { SQLiteProvider } from "expo-sqlite";
+import { SQLiteProvider,useSQLiteContext } from "expo-sqlite/next";
 import { useNavigation } from "@react-navigation/native";
 import HeaderComponent from "../../components/chat/HeaderComponent";
 import ChatItems from "../../components/chat/ChatItems";

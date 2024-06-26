@@ -2,7 +2,6 @@ import * as SQLite from "expo-sqlite/next";
 
 async function InitializeDB() {
   try {
-    console.log("MEOW");
     const db = await SQLite.openDatabaseAsync("chatapp.db");
     await db.execAsync(`CREATE TABLE IF NOT EXISTS messages(
       message_id TEXT PRIMARY KEY NOT NULL,

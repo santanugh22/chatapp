@@ -19,7 +19,7 @@ const StackNavigator = () => {
     url: "http://localhost:3000/api/",
   });
 
-  // const { socket, error } = useSocket("http://localhost:3000");
+  const { socket, error } = useSocket("http://localhost:3000");
 
   useEffect(() => {
     InitializeDB();
@@ -27,7 +27,7 @@ const StackNavigator = () => {
 
   return (
     <AxiosContext.Provider value={axiosInstance}>
-      <SocketContext.Provider value={"socket"}>
+      <SocketContext.Provider value={socket}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{

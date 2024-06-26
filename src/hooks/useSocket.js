@@ -15,7 +15,8 @@ const useSocket = (url) => {
     });
     socketIo.on("connect_error", (err) => {
       setError(err);
-      setSocket(null); // Reset socket on error
+      setSocket(null);
+      setConnected(false);
     });
     return () => {
       socketIo.disconnect();
