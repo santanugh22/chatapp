@@ -18,9 +18,13 @@ const StackNavigator = () => {
   return (
     <AxiosContext.Provider value={axiosInstance}>
       <NavigationContainer>
-        <Stack.Screen name="LOGIN" component={Login} />
-        <Stack.Screen name="REGISTER" component={Register} />
-        <Stack.Screen name="CHAT" component={Chat} />
+        <Stack.Navigator screenOptions={{
+          headerShown:false
+        }}>
+          <Stack.Screen name="LOGIN" component={Login} />
+          <Stack.Screen name="REGISTER" component={Register} />
+          <Stack.Screen name="CHAT" component={Chat} />
+        </Stack.Navigator>
       </NavigationContainer>
     </AxiosContext.Provider>
   );

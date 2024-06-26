@@ -6,14 +6,10 @@ import StackNavigator from "./src/navigators/StackNavigator";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StackNavigator />
-    </View>
+
+    <StackNavigator /> 
+
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+

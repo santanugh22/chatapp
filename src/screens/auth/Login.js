@@ -5,6 +5,7 @@ import LoginHeader from "../../components/login/LoginHeader";
 import AxiosContext from "../../utils/AxiosContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoginFormContainer from "../../components/login/LoginFormContainer";
 
 const Login = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -41,6 +42,8 @@ const Login = ({ navigation }) => {
     }
   }
 
+  console.log("MEOW");
+
   useEffect(() => {
     CheckLoginStatus();
     if (loggedIn) {
@@ -53,9 +56,11 @@ const Login = ({ navigation }) => {
       style={{
         flex: 1,
         paddingTop: Platform.OS === "android" ? 2 * insets.top : null,
+        backgroundColor: "#000",
       }}
     >
       <LoginHeader />
+      <LoginFormContainer />
     </SafeAreaView>
   );
 };
