@@ -1,5 +1,15 @@
-import { StyleSheet, Text, View, SafeAreaView, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import HeaderComponent from "../../components/message/HeaderComponent";
+import MessageContainer from "../../components/message/MessageContainer";
+import SendMessageBottomTab from "../../components/message/SendMessageBottomTab";
 const MessagingPage = () => {
   const insets = useSafeAreaInsets();
   return (
@@ -10,7 +20,11 @@ const MessagingPage = () => {
         backgroundColor: "#000",
       }}
     >
-      
+      <HeaderComponent />
+      <MessageContainer />
+      <KeyboardAvoidingView behavior="padding">
+        <SendMessageBottomTab />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
