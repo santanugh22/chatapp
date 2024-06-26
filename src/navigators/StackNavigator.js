@@ -4,14 +4,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import Login from "../screens/auth/Login";
 import Register from "../screens/auth/Register";
 import Chat from "../screens/chat/Chat";
+
+import AxiosContext from "../utils/AxiosContext";
 const Stack = createStackNavigator();
+
+import axios from "axios";
 const StackNavigator = () => {
+  const axiosInstance = axios.create({
+    url: "http://localhost:3000/api/",
+    headers: "",
+  });
+
   return (
-    <NavigationContainer>
-      <Stack.Screen name="LOGIN" component={Login} />
-      <Stack.Screen name="REGISTER" component={Register} />
-      <Stack.Screen name="CHAT" component={Chat} />
-    </NavigationContainer>
+    <AxiosContext.Provider value={axiosInstance}>
+      <NavigationContainer>
+        <Stack.Screen name="LOGIN" component={Login} />
+        <Stack.Screen name="REGISTER" component={Register} />
+        <Stack.Screen name="CHAT" component={Chat} />
+      </NavigationContainer>
+    </AxiosContext.Provider>
   );
 };
 export default StackNavigator;
