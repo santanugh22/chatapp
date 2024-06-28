@@ -30,8 +30,12 @@ const SendMessageBottomTab = () => {
             width: WIDTH * 0.9,
             height:HEIGHT*0.03,
             paddingLeft:7
+            ,color:"white",
+          
           }}
+          placeholderTextColor={"gray"}
           ref={ref}
+          placeholder='message'
         />
         <View
           style={{
@@ -41,7 +45,7 @@ const SendMessageBottomTab = () => {
           }}
         >
           <Pressable>
-            <Ionicons name="send-outline" size={24} color="black" />
+            <Ionicons name="send-outline" size={24} color="white" />
           </Pressable>
         </View>
       </View>

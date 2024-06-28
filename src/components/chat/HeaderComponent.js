@@ -10,9 +10,13 @@ const { height: HEIGHT, width: WIDTH } = Dimensions.get("window");
 import { useNetInfo } from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import NewChatModal from "./NewChatModal";
 const HeaderComponent = () => {
   const { isConnected } = useNetInfo();
   const navigation = useNavigation();
+
+  const [showFriends, setShowFriends] = useState(false);
 
   async function Logout() {
     try {
@@ -25,12 +29,13 @@ const HeaderComponent = () => {
   }
   return (
     <View style={styles.mainContainer}>
-      <View style={{
-        flexDirection:"row",
-
-      }}>
+      <View
+        style={{
+          flexDirection: "row",
+        }}
+      >
         {isConnected ? (
-          <Text style={{ color: "white",fontSize:24 }}>Chat App</Text>
+          <Text style={{ color: "white", fontSize: 24 }}>Chat App</Text>
         ) : (
           <View
             style={{
@@ -45,17 +50,32 @@ const HeaderComponent = () => {
           </View>
         )}
       </View>
-      <View>
-        <View></View>
-        <View>
+      <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",gap:4}}>
+        <View style={{
+          flexDirection:"row"
+        }}>
+          <Pressable onPress={() => setShowFriends(true)}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 17,
+              }}
+            >
+              New Chat
+            </Text>
+          </Pressable>
+        </View>
+        <View style={{
+          flexDirection:"row"
+        }}>
           <Pressable onPress={() => Logout()}>
             <View
               style={{
                 height: 40,
                 width: 80,
                 backgroundColor: "red",
-                justifyContent:"center",
-                alignItems:"center"
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Text>Logout</Text>
@@ -63,6 +83,7 @@ const HeaderComponent = () => {
           </Pressable>
         </View>
       </View>
+      <NewChatModal visible={showFriends} setVisible={setShowFriends} />
     </View>
   );
 };
@@ -74,6 +95,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "space-around",
     alignItems: "center",
-    flexDirection:"row"
+    flexDirection: "row",
   },
 });
