@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const useSocket = (url) => {
+const useSocket = (url, token) => {
   const [socket, setSocket] = useState(null);
   const [error, setError] = useState(null);
   const [connected, setConnected] = useState(false);
   useEffect(() => {
-    const socketIo = io(url);
+    const socketIo = io(url, {
+      extraHeaders: {
+        token: token,
+      },
+    });
 
     socketIo.on("connect", () => {
       setSocket(socketIo);
