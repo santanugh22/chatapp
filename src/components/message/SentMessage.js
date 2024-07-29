@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
 
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
-const SentMessage = () => {
+const SentMessage = ({ message }) => {
   return (
     <View style={styles.mainContainer}>
       <View>
-        <Text style={styles.messageContent}>This is the sent message</Text>
+        <Text style={styles.messageContent}>{message.message_content}</Text>
       </View>
       <View style={styles.timeContainer}>
-        <Text style={styles.timestampText}>12:00PM</Text>
+        <Text style={styles.timestampText}>
+          {new Date(message.sent_at).toLocaleTimeString()}
+        </Text>
       </View>
     </View>
   );
@@ -20,8 +22,8 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     borderRadius: 7,
     padding: 6,
-    left:WIDTH*0.4,
-    marginTop:4
+    left: WIDTH * 0.4,
+    marginTop: 4,
   },
   timeContainer: {
     padding: 2,

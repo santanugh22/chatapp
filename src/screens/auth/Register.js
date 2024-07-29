@@ -25,6 +25,7 @@ const Register = () => {
       await AsyncStorage.setItem("token", result.data.token);
 
       await AsyncStorage.setItem("username", result.data.username);
+      await AsyncStorage.setItem("user_id", result.data.user_id);
 
       navigation.replace("CHAT");
     } catch (error) {

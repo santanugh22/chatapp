@@ -1,28 +1,37 @@
-import { StyleSheet, Text, View,Dimensions } from 'react-native'
-const {height:HEIGHT,width:WIDTH}=Dimensions.get("screen")
-const ChatItems = () => {
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
+const ChatItems = ({ item }) => {
   return (
     <View style={styles.mainContainer}>
-      <View style={{
-        justifyContent:"center",
-        height:"100%",
-        paddingLeft:3
-      }}>
-        <Text style={{
-            fontSize:20,
-        }}>Shantanu Ghosh</Text>
+      <View
+        style={{
+          justifyContent: "center",
+          height: "100%",
+          paddingLeft: 3,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+          }}
+        >
+          {item.message_receiver_username}
+        </Text>
+        <View style={{}}>
+          <Text> Last message:{item.message_content}</Text>
+        </View>
       </View>
     </View>
-  )
-}
-export default ChatItems
+  );
+};
+export default ChatItems;
 const styles = StyleSheet.create({
   mainContainer: {
     height: HEIGHT * 0.08,
     width: WIDTH * 0.95,
     backgroundColor: "#93c5fd",
-    borderRadius:7,
-    alignSelf:"center",
-    marginBottom:2
+    borderRadius: 7,
+    alignSelf: "center",
+    marginBottom: 2,
   },
 });

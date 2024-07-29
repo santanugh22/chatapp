@@ -1,10 +1,17 @@
 import { StyleSheet, Text, View,Dimensions, Pressable } from 'react-native'
 const {height:HEIGHT,width:WIDTH}=Dimensions.get("screen")
 import { useNavigation } from '@react-navigation/native'
-const LoginBottomContainer = () => {
+const LoginBottomContainer = ({error}) => {
   const navigation=useNavigation()
   return (
     <View style={styles.mainContainer}>
+      {
+        error?.length? <Text style={{
+          color:"white",
+          fontSize:22
+        }}>{error}</Text>:null
+      }
+     
   <View style={{
     flexDirection:"row",
     gap:3
@@ -32,9 +39,9 @@ const LoginBottomContainer = () => {
 export default LoginBottomContainer
 const styles = StyleSheet.create({
   mainContainer:{
-    height:HEIGHT*0.1,
+    height:HEIGHT*0.2,
     width:WIDTH,
-    justifyContent:"center",
+
     alignItems:"center",
 
   }

@@ -11,7 +11,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
-const LoginFormContainer = ({ email, setEmail, password, setPassword, LoginUser }) => {
+const LoginFormContainer = ({ email, setEmail, password, setPassword, LoginUser ,setError}) => {
   const [view, setView] = useState(false);
   const navigation=useNavigation()
 
@@ -25,13 +25,23 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword, LoginUser 
     <View style={styles.mainContainer}>
       <View style={styles.mainForm}>
         <View style={styles.inputContainer}>
-          <TextInput placeholder="Email" style={styles.input} ref={ref} value={email} onChangeText={setEmail}/>
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            ref={ref}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize={"none"}
+          />
         </View>
         <View style={styles.passwordContainer}>
           <TextInput
             placeholder="Password"
             style={styles.input}
-            secureTextEntry={view} value={password} onChangeText={setPassword}
+            secureTextEntry={view}
+            value={password}
+            onChangeText={setPassword}
+            autoCapitalize={"none"}
           />
 
           {view ? (
@@ -55,7 +65,7 @@ const LoginFormContainer = ({ email, setEmail, password, setPassword, LoginUser 
         </View>
 
         <View style={styles.loginButtonContainer}>
-          <Pressable onPress={()=>LoginUser()}>
+          <Pressable onPress={() => LoginUser()}>
             <View style={styles.loginButton}>
               <Text style={styles.loginButtonText}>Login</Text>
             </View>

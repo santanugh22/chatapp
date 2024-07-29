@@ -11,33 +11,37 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import * as SQLite from "expo-sqlite/next";
 import NewChatModal from "./NewChatModal";
-const HeaderComponent = () => {
+const HeaderComponent = ({ showFriend, setShowFriend }) => {
   const { isConnected } = useNetInfo();
   const navigation = useNavigation();
 
+  const [db, setdb] = useState(null);
 
-  const [username,setUsername] = useState("")
-
-  const [showFriends, setShowFriends] = useState(false);
+  const [username, setUsername] = useState("");
 
   async function Logout() {
     try {
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("username");
+      await db.execAsync("DELETE FROM messages;")
+
       navigation.replace("LOGIN");
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(()=>{
-    (async()=>{
-      await AsyncStorage.getItem("username").then((value)=>{  
-        setUsername(value)
-      })
-    })()
-  })
+  useEffect(() => {
+    (async () => {
+      await AsyncStorage.getItem("username").then((value) => {
+        setUsername(value);
+      });
+      const db = await SQLite.openDatabaseAsync("chatapp.db");
+      setdb(db);
+    })();
+  });
   return (
     <View style={styles.mainContainer}>
       <View
@@ -61,10 +65,35 @@ const HeaderComponent = () => {
           </View>
         )}
       </View>
-      <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",gap:4}}>
-        <View style={{
-          flexDirection:"row"
-        }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 4,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Pressable onPress={() => setShowFriend(true)}>
+            <View
+              style={{
+                backgroundColor: "green",
+                padding: 5,
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                }}
+              >
+                New Chat
+              </Text>
+            </View>
+          </Pressable>
           <Pressable onPress={() => setShowFriends(true)}>
             <Text
               style={{
@@ -76,9 +105,11 @@ const HeaderComponent = () => {
             </Text>
           </Pressable>
         </View>
-        <View style={{
-          flexDirection:"row"
-        }}>
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
           <Pressable onPress={() => Logout()}>
             <View
               style={{
@@ -94,7 +125,6 @@ const HeaderComponent = () => {
           </Pressable>
         </View>
       </View>
-      <NewChatModal visible={showFriends} setVisible={setShowFriends} />
     </View>
   );
 };

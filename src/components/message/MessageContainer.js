@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, FlatList } from "react-native";
 import ReceivedMessage from "./ReceivedMessage";
 import SentMessage from "./SentMessage";
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
-const MessageContainer = () => {
+const MessageContainer = ({ messages, user_id }) => {
   return (
     <View
       style={{
@@ -10,8 +10,16 @@ const MessageContainer = () => {
         width: WIDTH,
       }}
     >
-      <ReceivedMessage />
-      <SentMessage/>
+      <FlatList
+        data={messages}
+        renderItem={({ item }) => {
+          if (item.sent_by === user_id) {
+            return <SentMessage message={item} />;
+          } else {
+            return <ReceivedMessage message={item} />;
+          }
+        }}
+      />
     </View>
   );
 };

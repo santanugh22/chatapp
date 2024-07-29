@@ -1,9 +1,14 @@
-import { StyleSheet, Text, View,Dimensions, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from '@react-navigation/native';
-const {height:HEIGHT,width:WIDTH}=Dimensions.get('window')
+import { useNavigation, useRoute } from "@react-navigation/native";
+const { height: HEIGHT, width: WIDTH } = Dimensions.get("window");
+
 const HeaderComponent = () => {
-    const navigation=useNavigation()
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const username = route.params.receiver_username;
+
   return (
     <View
       style={{
@@ -21,7 +26,7 @@ const HeaderComponent = () => {
           alignItems: "center",
         }}
       >
-        <Pressable onPress={()=>navigation.goBack()}>
+        <Pressable onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </Pressable>
       </View>
@@ -36,7 +41,7 @@ const HeaderComponent = () => {
             fontSize: 24,
           }}
         >
-         Shantanu 
+          {username}
         </Text>
       </View>
       <View
@@ -46,6 +51,6 @@ const HeaderComponent = () => {
       ></View>
     </View>
   );
-}
-export default HeaderComponent
-const styles = StyleSheet.create({})
+};
+export default HeaderComponent;
+const styles = StyleSheet.create({});

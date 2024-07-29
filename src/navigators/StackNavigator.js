@@ -7,27 +7,43 @@ import Chat from "../screens/chat/Chat";
 import InitializeDB from "../db/InitializeDB";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import AxiosContext from "../utils/AxiosContext";
+import { io } from "socket.io-client";
+
 const Stack = createStackNavigator();
-import useSocket from "../hooks/useSocket";
+
 import axios from "axios";
-import { createContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import SocketContext from "../utils/SocketContext";
 import MessagingPage from "../screens/chat/MessagingPage";
 const StackNavigator = () => {
-  axios.defaults.baseURL = "https://chatappbackend-vfg8.onrender.com/api";
+  axios.defaults.baseURL = "http://localhost:3000/api";
 
-  // const { socket, error, connected } = useSocket(
-  //   "https://chatappbackend-vfg8.onrender.com"
-  // );
+  const [socket, setSocket] = useState(null);
 
+  async function initializeSocket() {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        return;
+      }
+      const socket = io("http://localhost:3000", {
+        extraHeaders: {
+          token: token,
+        },
+      });
+      setSocket(socket);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     InitializeDB();
+    initializeSocket();
   }, []);
 
   return (
-    // <SocketContext.Provider value={socket}>
+    <SocketContext.Provider value={socket}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -40,7 +56,7 @@ const StackNavigator = () => {
           <Stack.Screen name="MESSAGE" component={MessagingPage} />
         </Stack.Navigator>
       </NavigationContainer>
-    // </SocketContext.Provider>
+    </SocketContext.Provider>
   );
 };
 export default StackNavigator;

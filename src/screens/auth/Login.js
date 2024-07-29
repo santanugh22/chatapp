@@ -25,21 +25,21 @@ const Login = ({ navigation }) => {
 
   async function LoginUser() {
     try {
-      const result = await axios.post('/auth/login', { email, password })
+      const result = await axios.post("/auth/login", { email, password });
       console.log(result, "result");
-      const { token, username } = result?.data;
+      const { token, username, user_id } = result?.data;
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("username", username);
+      await AsyncStorage.setItem("user_id", user_id);
+      setLoggedIn(true);
     } catch (error) {
-      setError(error.message);
-      console.log(error.message);
+      setError("Invalid credentials");
     }
   }
 
   async function CheckLoginStatus() {
     try {
       const token = await AsyncStorage.getItem("token");
-      console.log(token);
 
       if (token) {
         setLoggedIn(true);
@@ -52,7 +52,6 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     CheckLoginStatus();
     if (loggedIn) {
-      console.log("MEOW");
       navigation.replace("CHAT");
     }
   }, [loggedIn]);
@@ -73,9 +72,10 @@ const Login = ({ navigation }) => {
           password={password}
           setPassword={setPassword}
           LoginUser={LoginUser}
+          setError={setError}
         />
       </KeyboardAvoidingView>
-      <LoginBottomContainer />
+      <LoginBottomContainer error={error} />
     </SafeAreaView>
   );
 };
