@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as SQLite from "expo-sqlite/next";
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useEffect, useState, useCallback, useRef } from "react";
 import { randomUUID } from "expo-crypto";
 import SocketContext from "../../utils/SocketContext";
 import HeaderComponent from "../../components/message/HeaderComponent";
@@ -22,6 +22,8 @@ const MessagingPage = () => {
   const [db, setDb] = useState(null);
   const [messageData, setMessageData] = useState([]);
   const socket = useContext(SocketContext);
+
+  const ref = useRef(null);
 
   const SendMessage = async () => {
     const messageObj = {
@@ -70,9 +72,8 @@ const MessagingPage = () => {
   const handleNewMessage = useCallback(
     debounce(async (data) => {
       try {
-        
-        if (data.sent_by === data.received_by) {
-          return;
+        if (data.received_by === route.params.user_id) {
+          setMessageData((prevData) => [...prevData, data]);
         }
         await db.runAsync(
           `INSERT INTO messages(
@@ -127,6 +128,7 @@ const MessagingPage = () => {
               route.params.user_id,
             ]
           );
+
           setMessageData(messages);
         }
       } catch (error) {
@@ -153,7 +155,7 @@ const MessagingPage = () => {
       }}
     >
       <HeaderComponent />
-      <MessageContainer messages={messageData} user_id={route.params.user_id} />
+      <MessageContainer messages={messageData} user_id={route.params.user_id} ref={ref}/>
       <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={100}>
         <SendMessageBottomTab
           SendMessage={SendMessage}

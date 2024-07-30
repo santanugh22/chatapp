@@ -49,8 +49,6 @@ const Friends = ({ visible, setVisible }) => {
     }
   }
 
-  console.log(friends);
-
   return (
     <Modal visible={visible}>
       <View

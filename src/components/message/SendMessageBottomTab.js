@@ -9,6 +9,7 @@ import {
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
+
 const SendMessageBottomTab = ({ SendMessage, message, setMessage }) => {
   return (
     <View

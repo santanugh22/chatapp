@@ -1,8 +1,19 @@
-import { StyleSheet, Text, View, Dimensions, FlatList } from "react-native";
+import { StyleSheet, View, Dimensions, FlatList } from "react-native";
 import ReceivedMessage from "./ReceivedMessage";
 import SentMessage from "./SentMessage";
+import { useEffect, useRef } from "react";
+
 const { height: HEIGHT, width: WIDTH } = Dimensions.get("screen");
+
 const MessageContainer = ({ messages, user_id }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollToEnd({ animated: true });
+    }
+  }, [messages]);
+
   return (
     <View
       style={{
@@ -19,9 +30,14 @@ const MessageContainer = ({ messages, user_id }) => {
             return <ReceivedMessage message={item} />;
           }
         }}
+        keyExtractor={(item) => item.message_id.toString()}
+        ref={ref}
+        onContentSizeChange={() => ref.current.scrollToEnd({ animated: true })}
       />
     </View>
   );
 };
+
 export default MessageContainer;
+
 const styles = StyleSheet.create({});

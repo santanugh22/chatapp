@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import SocketContext from "../utils/SocketContext";
 import MessagingPage from "../screens/chat/MessagingPage";
 const StackNavigator = () => {
-  axios.defaults.baseURL = "http://localhost:3000/api";
+  axios.defaults.baseURL = "https://chatly-backend-8325.onrender.com/api";
 
   const [socket, setSocket] = useState(null);
 
@@ -26,10 +26,13 @@ const StackNavigator = () => {
       if (!token) {
         return;
       }
-      const socket = io("http://localhost:3000", {
+      const socket = io("https://chatly-backend-8325.onrender.com", {
         extraHeaders: {
           token: token,
         },
+      });
+      socket.on("error", (error) => {
+        console.log(error);
       });
       setSocket(socket);
     } catch (error) {

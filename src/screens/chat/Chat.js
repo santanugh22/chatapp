@@ -48,15 +48,25 @@ const Chat = () => {
         try {
           if (db) {
             const chats = await db.getAllAsync(
-              `SELECT m1.received_by, m1.message_receiver_username, m1.message_content
-               FROM messages m1
-               JOIN (
-                   SELECT received_by, MAX(sent_at) as latest_sent_at
-                   FROM messages
-                   GROUP BY received_by
-               ) m2
-               ON m1.received_by = m2.received_by AND m1.sent_at = m2.latest_sent_at
-               ORDER BY m1.sent_at DESC;`
+              `SELECT m1.received_by, m1.message_receiver_username, m1.message_content, m1.sent_by
+FROM messages m1
+JOIN (
+    SELECT 
+        CASE 
+            WHEN sent_by < received_by THEN sent_by || '-' || received_by 
+            ELSE received_by || '-' || sent_by 
+        END as user_pair,
+        MAX(sent_at) as latest_sent_at
+    FROM messages
+    GROUP BY user_pair
+) m2
+ON 
+    (CASE 
+        WHEN m1.sent_by < m1.received_by THEN m1.sent_by || '-' || m1.received_by 
+        ELSE m1.received_by || '-' || m1.sent_by 
+    END) = m2.user_pair 
+    AND m1.sent_at = m2.latest_sent_at
+ORDER BY m1.sent_at DESC;`
             );
 
             console.log(await db.getAllAsync("SELECT * FROM messages;"));
@@ -69,40 +79,7 @@ const Chat = () => {
     }, [db])
   );
 
-  const handleNewMessage = useCallback(
-    debounce(async (message) => {
-      console.log("message received", message);
-      try {
-        if (db && message.sent_by !== message.received_by) {
-          await db.runAsync(
-            `INSERT INTO messages(
-              message_id,
-              sent_by,
-              message_content,
-              sent_at,
-              received_by,
-              message_status,
-              message_receiver_username,
-              sender_username
-            ) VALUES(?,?,?,?,?,?,?,?)`,
-            [
-              message.message_id,
-              message.sent_by,
-              message.message_content,
-              message.sent_at,
-              message.received_by,
-              message.message_status,
-              message.message_receiver_username,
-              message.sender_username,
-            ]
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }, 300),
-    [db]
-  );
+  console.log(chats);
 
   const handleUndeliveredMessages = useCallback(
     debounce(async (data) => {
@@ -142,16 +119,14 @@ const Chat = () => {
 
   useEffect(() => {
     if (db) {
-      socket.on("message", handleNewMessage);
       socket.on("undelivered", handleUndeliveredMessages);
       socket.emit("receive_undelivered");
 
       return () => {
-        socket.off("message", handleNewMessage);
         socket.off("undelivered", handleUndeliveredMessages);
       };
     }
-  }, [db, handleNewMessage, handleUndeliveredMessages, socket]);
+  }, [db, handleUndeliveredMessages, socket]);
 
   return (
     <SafeAreaView
@@ -166,19 +141,21 @@ const Chat = () => {
         data={chats}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() =>
+            onPress={() => {
               navigation.navigate("MESSAGE", {
-                receiver_id: item.received_by,
-                receiver_username: item.message_receiver_username,
+                receiver_id:
+                  item.sent_by == userid ? item.received_by : item.sent_by,
                 user_id: userid,
                 username: username,
-              })
-            }
+                receiver_username: item.message_receiver_username,
+              });
+            }}
           >
             <ChatItems item={item} />
           </Pressable>
         )}
       />
+
       <Friends visible={showfriend} setVisible={setShowFriend} />
     </SafeAreaView>
   );
